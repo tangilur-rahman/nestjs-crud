@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { LoginUserDTO } from 'src/dto/login-user.dto';
 import { RegisterUserDTO } from 'src/dto/register-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthHelperService } from 'src/shared/auth-helper.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly authHelperService: AuthHelperService,
   ) {}
 
   // create user
@@ -26,7 +26,7 @@ export class UserService {
 
       // generate jwt token for the user
       const payload = { sub: user.id, email: user.email };
-      const token = await this.jwtService.signAsync(payload);
+      const token = await this.authHelperService.generateToken(payload);
 
       return { user, token };
     } catch (error: unknown) {
@@ -57,7 +57,7 @@ export class UserService {
 
       // generate jwt token for the user
       const payload = { sub: user.id, email: user.email };
-      const token = await this.jwtService.signAsync(payload);
+      const token = await this.authHelperService.generateToken(payload);
 
       return { user, token };
     } catch (error: unknown) {
