@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class RegisterUserDTO {
   @IsNotEmpty()
@@ -14,4 +15,6 @@ export class RegisterUserDTO {
   @IsNotEmpty()
   @IsString({ message: 'Password must be a string' })
   password: string;
+
+  role: Role;
 }

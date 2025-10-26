@@ -23,6 +23,7 @@ export class UserService {
           last_name: registerUserDto.lName,
           email: registerUserDto.email,
           password: registerUserDto.password,
+          role: registerUserDto.role,
         },
       });
 

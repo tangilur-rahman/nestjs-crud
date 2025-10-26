@@ -8,14 +8,17 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { Courses } from '@prisma/client';
+import { Courses, Role } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
+@Roles(Role['ADMIN'])
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
