@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { LoginUserDTO } from 'src/dto/login-user.dto';
 import { RegisterUserDTO } from 'src/dto/register-user.dto';
@@ -25,5 +26,12 @@ export class AuthService {
     return await this.userService.validateUserCredentials({
       ...loginUserDto,
     });
+  }
+
+  // 3️⃣ get user profile
+  async getUserProfile(where: {
+    email: string;
+  }): Promise<{ error: string } | null | Omit<User, 'password'>> {
+    return await this.userService.findUser(where);
   }
 }

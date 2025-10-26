@@ -1,0 +1,8 @@
+model Courses {
+   id          Int      @id @default(autoincrement())
+   name        String
+   description String
+   price       String
+   createdAt   DateTime @default(now())
+   updatedAt   DateTime @updatedAt
+}

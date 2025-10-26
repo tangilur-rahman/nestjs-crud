@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { LoginUserDTO } from 'src/dto/login-user.dto';
 import { RegisterUserDTO } from 'src/dto/register-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthHelperService } from 'src/shared/auth-helper.service';
+import { omit } from 'src/utils/omit';
 
 @Injectable()
 export class UserService {
@@ -12,7 +14,7 @@ export class UserService {
     private readonly authHelperService: AuthHelperService,
   ) {}
 
-  // create user
+  // 1️⃣ create user
   async createUser(registerUserDto: RegisterUserDTO) {
     try {
       const user = await this.prisma.user.create({
@@ -25,10 +27,9 @@ export class UserService {
       });
 
       // generate jwt token for the user
-      const payload = { role: user.role, email: user.email };
-      const token = await this.authHelperService.generateToken(payload);
+      const token = await this.authHelperService.generateToken(user);
 
-      return { user, token };
+      return { user: omit(user, 'password'), token };
     } catch (error: unknown) {
       console.log(error);
 
@@ -36,7 +37,7 @@ export class UserService {
     }
   }
 
-  // validate user credentials
+  // 2️⃣ validate user credentials
   async validateUserCredentials({ email, password }: LoginUserDTO) {
     try {
       // fetching user
@@ -56,14 +57,33 @@ export class UserService {
       }
 
       // generate jwt token for the user
-      const payload = { role: user.role, email: user.email };
-      const token = await this.authHelperService.generateToken(payload);
+      const token = await this.authHelperService.generateToken(user);
 
-      return { user, token };
+      return { user: omit(user, 'password'), token };
     } catch (error: unknown) {
       console.log(error);
 
       return { error: 'Error creating user' };
+    }
+  }
+
+  // 3️⃣ find user profile
+  async findUser(where: {
+    email: string;
+  }): Promise<Omit<User, 'password'> | { error: string } | null> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: where.email },
+      });
+
+      if (!user) {
+        return null;
+      }
+
+      return omit(user, 'password');
+    } catch (error: unknown) {
+      console.log(error);
+      return { error: 'Error finding user' };
     }
   }
 }
