@@ -25,7 +25,7 @@ export class UserService {
       });
 
       // generate jwt token for the user
-      const payload = { sub: user.id, email: user.email };
+      const payload = { role: user.role, email: user.email };
       const token = await this.authHelperService.generateToken(payload);
 
       return { user, token };
@@ -56,7 +56,7 @@ export class UserService {
       }
 
       // generate jwt token for the user
-      const payload = { sub: user.id, email: user.email };
+      const payload = { role: user.role, email: user.email };
       const token = await this.authHelperService.generateToken(payload);
 
       return { user, token };

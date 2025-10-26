@@ -1,13 +1,12 @@
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import path from 'node:path';
-
-// load .env in project root so env() can read it during prisma CLI commands
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
-
 import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  schema: path.join('prisma', 'schema.prisma'),
+  schema: path.join(process.cwd(), 'prisma', 'schema'),
+  migrations: {
+    path: path.join(process.cwd(), 'prisma', 'migrations'),
+  },
   engine: 'classic',
   datasource: {
     url: env('DATABASE_URL'),
