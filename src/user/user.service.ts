@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { LoginUserDTO } from 'src/dto/login-user.dto';
-import { RegisterUserDTO } from 'src/dto/register-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthHelperService } from 'src/shared/auth-helper.service';
+import { LoginUserDTO } from 'src/user/dto/login-user.dto';
+import { RegisterUserDTO } from 'src/user/dto/register-user.dto';
 import { omit } from 'src/utils/omit';
 
 @Injectable()
