@@ -28,9 +28,11 @@ export class CoursesService {
   }
 
   // 2️⃣ get all courses
-  async findAll(): Promise<Courses[] | [] | { error: string }> {
+  async findAll(skip?: number): Promise<Courses[] | [] | { error: string }> {
     try {
-      const allCourses = await this.prisma.courses.findMany();
+      const allCourses = await this.prisma.courses.findMany({
+        skip,
+      });
       return allCourses;
     } catch (error) {
       console.log(error);

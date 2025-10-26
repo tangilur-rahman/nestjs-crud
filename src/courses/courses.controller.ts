@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Courses, Role } from '@prisma/client';
@@ -32,8 +34,10 @@ export class CoursesController {
 
   // 2️⃣ get all courses
   @Get()
-  async findAll(): Promise<Courses[] | [] | { error: string }> {
-    return await this.coursesService.findAll();
+  async findAll(
+    @Query('skip', new ParseIntPipe({ optional: true })) skip: number,
+  ): Promise<Courses[] | [] | { error: string }> {
+    return await this.coursesService.findAll(skip);
   }
 
   // 3️⃣ get one course
