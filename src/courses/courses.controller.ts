@@ -17,8 +17,10 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('courses')
+@ApiTags('Courses')
 @UseGuards(AuthGuard, RolesGuard)
 @Roles(Role['ADMIN'])
 export class CoursesController {
